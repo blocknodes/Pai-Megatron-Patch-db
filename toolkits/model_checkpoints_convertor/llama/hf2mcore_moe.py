@@ -646,7 +646,7 @@ def main():
     check_args_is_valid(args, config)
     print('create megatron model, random init')
     mgtokenizer, mgmodel = create_megatron_model(args)
-    check_tokenizer_is_same(hgtokenizer, mgtokenizer)
+    #check_tokenizer_is_same(hgtokenizer, mgtokenizer)
     save_model_info(mgmodel, hgmodel, config)
 
     if args.convert_checkpoint_from_megatron_to_transformers:

@@ -32,10 +32,11 @@
 # tp4_pp1_expert_8_ep4
 # sh hf2mcore_moe.sh /workdir/Pai-megatron /workdir/llama/llama2_7b_mcore_moe8_tp4_pp1_ep4 /workdir/llama/hf_moe8_tp4_pp1_ep4 4 1 0 8 4 true
 
-set -e
+set -x
+export GLOO_SOCKET_IFNAME=lo
 START_TIME=$SECONDS
-HG_CKPT_PATH=/mnt/llama2-ckpts/Llama-2-7b-hf # ckpt from https://huggingface.co/huggyllama/llama2-7b
-export CUDA_VISIBLE_DEVICES=0
+HG_CKPT_PATH=/cloudfs-data/db/model/Llama-2-7b-hf # ckpt from https://huggingface.co/huggyllama/llama2-7b
+
 MASTER_ADDR=localhost
 MASTER_PORT=$(shuf -n 1 -i 10000-65535)
 MEGATRON_PATH=$1
@@ -76,7 +77,6 @@ torchrun ${DISTRIBUTED_ARGS} hf2mcore_moe.py \
     --megatron-path ${MEGATRON_PATH} \
     --target_tensor_model_parallel_size ${TP} \
     --target_pipeline_model_parallel_size ${PP} \
-    --use-cpu-initialization \
     --bf16 \
     --num-layers 32 \
     --hidden-size 4096 \

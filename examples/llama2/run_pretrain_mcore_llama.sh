@@ -7,12 +7,13 @@ MEGATRON_PATH=${MEGATRON_PATCH_PATH}/Megatron-LM-240126
 export PYTHONPATH=${MEGATRON_PATH}:${MEGATRON_PATCH_PATH}:$PYTHONPATH
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 if [ $ENV = dsw ]; then
-export CUDA_VISIBLE_DEVICES=7
+
 MASTER_ADDR=localhost
 MASTER_PORT=$(shuf -n 1 -i 10000-65535)
 NNODES=1
 NODE_RANK=0
-GPUS_PER_NODE=1
+GPUS_PER_NODE=4
+export GLOO_SOCKET_IFNAME=lo
 
 elif [ $ENV = dlc ]; then
 
@@ -233,6 +234,8 @@ megatron_options="  \
         --position-embedding-type rope \
         --untie-embeddings-and-output-weights \
         --disable-bias-linear \
+		--attention-dropout 0 \
+       	--hidden-dropout 0 \
         --eod-mask-loss \
         --reset-attention-mask
         "
